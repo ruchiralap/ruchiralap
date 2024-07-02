@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "category_name": "Organic Oil",
+    "category_image": "https://ghorerbazar.com/cdn/shop/products/Local-Maghi-Sarisha-Oil-aoo-aa_C2_A6aaaa_C6_92aaaa_C2_A6.jpg?v=1707771527&width=360"
+  },
+  {
+    "id": 2,
+    "category_name": "Honey",
+    "category_image": "https://ghorerbazar.com/cdn/shop/products/honey-nuts-441x441-1.png?v=1713175764&width=360"
+  },
+  {
+    "id": 3,
+    "category_name": "Nuts & Seeds",
+    "category_image": "https://ghorerbazar.com/cdn/shop/files/WhatsAppImage2024-04-25at13.16.27_0f650e3e-fb7c-4af1-b2ca-18d6b412ca2b.jpg?v=1714045244&width=360"
+  },
+  {
+    "id": 4,
+    "category_name": "Local Maghi Sarisha Oil",
+    "category_image": "https://ghorerbazar.com/cdn/shop/products/Local-Maghi-Sarisha-Oil-aoo-aa_C2_A6aaaa_C6_92aaaa_C2_A6.jpg?v=1707771527&width=360"
+  },
+  {
+    "id": 5,
+    "category_name": "Masala",
+    "category_image": "https://ghorerbazar.com/cdn/shop/files/New-mosla-combo-product-image.jpg?v=1715606064&width=360"
+  }
+]
