@@ -5,6 +5,7 @@ import AllProducts from "../Pages/AllProducts/AllProducts";
 import AllCategories from "../Pages/AllCategories/AllCategories";
 import AddCategories from "../Pages/AddCategories/AddCategories";
 import AllOrders from "../Pages/AllOrders/AllOrders";
+import Banners from "../Pages/Banners/Banners";
 
 const Router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const Router = createBrowserRouter([
       {
         path: "/addCategories",
         element: <AddCategories />,
+      },
+      {
+        path: "/allBanners",
+        element: <Banners />,
       },
       {
         path: "/allOrders",

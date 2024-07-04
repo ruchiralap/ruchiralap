@@ -1,4 +1,12 @@
-import { FolderGit2, Plus, ShoppingBasket, CirclePlus } from "lucide-react";
+import {
+  FolderGit2,
+  Plus,
+  ShoppingBasket,
+  CirclePlus,
+  ListOrdered,
+  Logs,
+  ImagePlus,
+} from "lucide-react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 
 const Layouts = () => {
@@ -6,7 +14,7 @@ const Layouts = () => {
     <>
       <div className="flex font-class mx-auto max-w-6xl ">
         {/* dashboard side bar */}
-        <div className="lg:w-64 min-h-screen bg-[#ece7d4a8] bg-gradient-to-r from-[#ece7d4a8] via-[#fff0b3] backdrop-blur-lg">
+        <div className="lg:w-64 min-h-screen  bg-[#ece7d4a8] bg-gradient-to-r from-[#ece7d4a8] via-[#fff0b3] backdrop-blur-lg">
           <ul className="menu space-y-2 p-4 text-xl text-black">
             <>
               <li>
@@ -44,8 +52,14 @@ const Layouts = () => {
 
               <li>
                 <NavLink to="/allOrders">
-                  <CirclePlus className="me-3" />
+                  <Logs className="me-3" />
                   Orders
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/allBanners">
+                  <ImagePlus className="me-3" />
+                  Banners
                 </NavLink>
               </li>
             </>
