@@ -40,7 +40,8 @@ const OrderDetailsModal = ({ order, isOpen, onClose }) => {
             <ul>
               {order.products.map((product) => (
                 <li key={product.id}>
-                  {product.name} - {product.price} x {product.quantity}
+                  {product.name} - {product.price} x {product.quantity} -
+                  Weight: {product.weight}
                 </li>
               ))}
             </ul>
