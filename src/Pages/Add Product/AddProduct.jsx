@@ -2,14 +2,14 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import PrivateAxios from "../../Hooks/PrivateAxios";
 import axios from "axios";
+
 const AddProduct = () => {
   const { register, handleSubmit, reset } = useForm();
 
   const image_hosting_key = "7b7cc2939f38dd7f29e0801393262933";
-  console.log("image key", image_hosting_key);
   const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+
   const onSubmit = async (data) => {
-    console.log(data);
     const imageFile = { image: data.productimage[0] };
     const res = await axios.post(image_hosting_api, imageFile, {
       headers: {
@@ -17,15 +17,12 @@ const AddProduct = () => {
       },
     });
     if (res.data.success) {
-      // now send the menu item data to the server with the image url
-
-      console.log("imageurl from imagebb", res.data.data.display_url);
-
       const productInfo = {
         product_name: data.product_name,
         category_name: data.category_name,
         price: data.price,
         product_image: res.data.data.display_url,
+        weight: data.weight,
         description: data.description,
         description_title: data.description_title,
         description_title_1: data.description_title_1,
@@ -56,7 +53,6 @@ const AddProduct = () => {
         },
       })
         .then((response) => {
-          console.log(response.data);
           if (response.data.insertedId) {
             Swal.fire({
               title: "Success!",
@@ -64,20 +60,21 @@ const AddProduct = () => {
               icon: "success",
               confirmButtonText: "Cool",
             });
+            reset();
           }
         })
         .catch((error) => {
           console.error("Error:", error);
-          // Handle errors if any
         });
     }
   };
+
   return (
     <div>
       <div>
         <h1 className="text-center font-bold my-4">Add A Product</h1>
         <div className="min-h-screen px-5">
-          <div className="lg:max-w-6xl   mx-auto  rounded-xl shadow-xl">
+          <div className="lg:max-w-6xl mx-auto rounded-xl shadow-xl">
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="card-body border"
@@ -119,30 +116,41 @@ const AddProduct = () => {
                     className="input input-bordered w-full"
                   />
                 </div>
-                <div className="form-control ">
+                <div className="form-control">
                   <label className="label">
                     <span className="label-text text-black">Product Image</span>
                   </label>
-
                   <input
                     {...register("productimage", { required: true })}
                     type="file"
                     className="file-input w-full max-w-xs"
                   />
                 </div>
-                <div className="form-control">
+                <div className="form-control lg:col-span-2">
+                  <label className="label">
+                    <span className="label-text text-black">Weight</span>
+                  </label>
+                  <input
+                    {...register("weight", { required: true })}
+                    className="textarea textarea-bordered h-10"
+                    cols="30"
+                    rows="10"
+                    placeholder="weight"
+                  ></input>
+                </div>
+                <div className="form-control lg:col-span-2">
                   <label className="label">
                     <span className="label-text text-black">Description</span>
                   </label>
                   <textarea
                     {...register("description", { required: true })}
-                    className="textarea textarea-bordered h-10"
+                    className="textarea textarea-bordered h-10 w-full"
                     cols="30"
                     rows="10"
                     placeholder="Description"
                   ></textarea>
                 </div>
-                <div className="form-control">
+                <div className="form-control lg:col-span-2">
                   <label className="label">
                     <span className="label-text text-black">
                       Description Title
@@ -162,7 +170,7 @@ const AddProduct = () => {
                     key={num}
                     className="w-full lg:col-span-2 grid lg:grid-cols-2 gap-2"
                   >
-                    <div className="form-control col-span-1">
+                    <div className="form-control lg:col-span-2">
                       <label className="label">
                         <span className="label-text text-black">{`Description Title ${num}`}</span>
                       </label>
@@ -196,7 +204,7 @@ const AddProduct = () => {
               <input
                 type="submit"
                 value="Add Product"
-                className="btn btn-block text-white border-none bg-red-500"
+                className="btn btn-block text-white border-none bg-black"
               />
             </form>
           </div>

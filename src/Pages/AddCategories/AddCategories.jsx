@@ -89,7 +89,7 @@ const AddCategories = () => {
                 </div>
                 <input
                   type="submit"
-                  value="Add Product"
+                  value="Add Category"
                   className="btn btn-block text-white border-none bg-black"
                 />
               </form>

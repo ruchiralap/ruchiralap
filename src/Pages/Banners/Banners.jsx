@@ -46,11 +46,15 @@ const Banners = () => {
         };
 
         axios
-          .put(`/updateBanner/${data.banner_id}`, bannerInfoToUpdate, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
+          .put(
+            `https://ruchir-alap-backend.vercel.app/updateBanner/${data.banner_id}`,
+            bannerInfoToUpdate,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          )
           .then((response) => {
             if (response.data.modifiedCount > 0) {
               Swal.fire({

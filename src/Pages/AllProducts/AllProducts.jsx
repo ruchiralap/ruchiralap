@@ -14,15 +14,15 @@ const AllProducts = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const image_hosting_key = "7b7cc2939f38dd7f29e0801393262933";
   const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+
   const openModal = (product) => {
     setSelectedProduct(product);
 
-    console.log("from open function", product);
     setValue("product_name", product.product_name);
     setValue("category_name", product.category_name);
     setValue("price", product.price);
     setValue("product_id", product._id);
-    // setValue("image url", product.product_image);
+    setValue("weight", product.weight);
     setDefaultImageUrl(product.product_image);
     setValue("description", product.description);
     setValue("description_title", product.description_title);
@@ -60,7 +60,6 @@ const AllProducts = () => {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
             if (data.deletedCount > 0) {
               Swal.fire("Deleted!", "Category has been deleted.", "success");
               refetch();
@@ -82,11 +81,7 @@ const AllProducts = () => {
     },
   });
 
-  ///handle edit
   const onSubmit = async (data) => {
-    // const category_name = data.category_name;
-
-    console.log("data", data);
     if (data.productimage[0]) {
       const imageFile = { image: data.productimage[0] };
       const res = await axios.post(image_hosting_api, imageFile, {
@@ -100,6 +95,7 @@ const AllProducts = () => {
           category_name: data.category_name,
           price: data.price,
           product_image: res.data.data.display_url,
+          weight: data.weight,
           description: data.description,
           description_title: data.description_title,
           description_title_1: data.description_title_1,
@@ -134,7 +130,6 @@ const AllProducts = () => {
           }
         )
           .then((response) => {
-            console.log(response.data);
             if (response.data.modifiedCount > 0) {
               Swal.fire({
                 title: "Success!",
@@ -156,6 +151,7 @@ const AllProducts = () => {
         category_name: data.category_name,
         price: data.price,
         product_image: defaultImageUrl,
+        weight: data.weight,
         description: data.description,
         description_title: data.description_title,
         description_title_1: data.description_title_1,
@@ -189,7 +185,6 @@ const AllProducts = () => {
         }
       )
         .then((response) => {
-          console.log(response.data);
           if (response.data.modifiedCount > 0) {
             Swal.fire({
               title: "Success!",
@@ -235,192 +230,147 @@ const AllProducts = () => {
                   >
                     <td className="p-2">
                       <img
-                        className="w-16 h-16 object-cover rounded"
+                        className="w-20 h-20 object-cover"
                         src={product.product_image}
                         alt={product.product_name}
                       />
                     </td>
-                    <td className="p-2 align-middle">{product.product_name}</td>
-                    <td className="p-2 align-middle">
-                      {product.category_name}
-                    </td>
-                    <td className="p-2 align-middle">{product.price}</td>
-                    <td className="flex justify-center items-center space-x-4 p-2 align-middle">
-                      <button
-                        onClick={() => handleDelete(product._id)}
-                        className="mt-4 "
-                      >
-                        <Trash2 color="#ff0000" />
-                      </button>
+                    <td className="p-2">{product.product_name}</td>
+                    <td className="p-2">{product.category_name}</td>
+                    <td className="p-2">{product.price}</td>
+                    <td className="p-2">
                       <button
                         onClick={() => openModal(product)}
-                        className="mt-4 ms-4"
+                        className="btn btn-ghost btn-xs mr-2"
                       >
-                        <Pencil color="#dfa70c" />
+                        <Pencil />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(product._id)}
+                        className="btn btn-ghost btn-xs"
+                      >
+                        <Trash2 />
                       </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
-              <tfoot>
-                <tr className="text-xl bg-white/40 backdrop-blur-md">
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th>Category</th>
-                  <th>Price</th>
-                  <th>Action</th>
-                </tr>
-              </tfoot>
             </table>
           </div>
         )}
       </div>
-
-      {isModalOpen && selectedProduct && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-[#fffaf0] rounded-lg shadow-lg p-8 relative max-h-[90vh] overflow-y-auto">
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-start justify-center z-50">
+          <div className="modal-box">
             <button
               onClick={closeModal}
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+              className="btn btn-sm btn-circle absolute right-2 top-2"
             >
               ✕
             </button>
-            <div className="lg:max-w-6xl mx-auto rounded-xl">
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="card-body border space-y-4"
-              >
-                <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text text-black">
-                        Product Name
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Product Name"
-                      {...register("product_name", { required: true })}
-                      required
-                      className="input input-bordered w-full"
-                    />
-                  </div>
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text text-black">
-                        Category Name
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Category Name"
-                      {...register("category_name", { required: true })}
-                      required
-                      className="input input-bordered w-full"
-                    />
-                  </div>
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text text-black">Price</span>
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="Price"
-                      {...register("price", { required: true })}
-                      required
-                      className="input input-bordered w-full"
-                    />
-                  </div>
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="label-text text-black">
-                        Product Image
-                      </span>
-                    </label>
-                    <input
-                      {...register("productimage")}
-                      type="file"
-                      className="file-input w-full max-w-xs"
-                    />
-
-                    <input
-                      type="text"
-                      placeholder="Category id"
-                      {...register("product_id", { required: true })}
-                      required
-                      className="input hidden input-bordered w-full"
-                    />
-                  </div>
-                  <div className="form-control col-span-2">
-                    <label className="label">
-                      <span className="label-text text-black">Description</span>
-                    </label>
-                    <textarea
-                      {...register("description", { required: true })}
-                      className="textarea textarea-bordered h-24"
-                      placeholder="Description"
-                    ></textarea>
-                  </div>
-                  <div className="form-control col-span-2">
-                    <label className="label">
-                      <span className="label-text text-black">
-                        Description Title
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Description Title"
-                      {...register("description_title", { required: true })}
-                      required
-                      className="input input-bordered w-full"
-                    />
-                  </div>
-
-                  {["1", "2", "3", "4", "5"].map((num) => (
-                    <div key={num} className="col-span-2 space-y-4">
-                      <div className="form-control">
-                        <label className="label">
-                          <span className="label-text text-black">{`Description Title ${num}`}</span>
-                        </label>
-                        <input
-                          type="text"
-                          placeholder={`Description Title ${num}`}
-                          {...register(`description_title_${num}`, {
-                            required: num !== "5",
-                          })}
-                          className="input input-bordered w-full"
-                        />
-                      </div>
-                      <div className="grid lg:grid-cols-3 gap-4">
-                        {[1, 2, 3].map((point) => (
-                          <div key={point} className="form-control">
-                            <label className="label">
-                              <span className="label-text text-black">{`Description Point ${num}.${point}`}</span>
-                            </label>
-                            <input
-                              type="text"
-                              placeholder={`Description Point ${num}.${point}`}
-                              {...register(
-                                `description_point_${num}_${point}`,
-                                {
-                                  required: num !== "5",
-                                }
-                              )}
-                              className="input input-bordered w-full"
-                            />
-                          </div>
-                        ))}
-                      </div>
+            <h2 className="text-2xl font-bold mb-4">Edit Product</h2>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <input type="hidden" {...register("product_id")} />
+              <div className="mb-4">
+                <label className="block text-sm font-bold mb-2">
+                  Product Name
+                </label>
+                <input
+                  type="text"
+                  {...register("product_name")}
+                  className="input input-bordered w-full"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-bold mb-2">
+                  Category Name
+                </label>
+                <input
+                  type="text"
+                  {...register("category_name")}
+                  className="input input-bordered w-full"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-bold mb-2">Price</label>
+                <input
+                  type="number"
+                  {...register("price")}
+                  className="input input-bordered w-full"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-bold mb-2">Weight</label>
+                <input
+                  type="text"
+                  {...register("weight")}
+                  className="input input-bordered w-full"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-bold mb-2">
+                  Product Image
+                </label>
+                <input
+                  type="file"
+                  {...register("productimage")}
+                  className="file-input file-input-bordered w-full"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-bold mb-2">
+                  Description
+                </label>
+                <textarea
+                  {...register("description")}
+                  className="textarea textarea-bordered w-full"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-bold mb-2">
+                  Description Title
+                </label>
+                <input
+                  type="text"
+                  {...register("description_title")}
+                  className="input input-bordered w-full"
+                />
+              </div>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="mb-4">
+                  <label className="block text-sm font-bold mb-2">
+                    Description Title {i}
+                  </label>
+                  <input
+                    type="text"
+                    {...register(`description_title_${i}`)}
+                    className="input input-bordered w-full"
+                  />
+                  {[1, 2, 3].map((j) => (
+                    <div key={j}>
+                      <label className="block text-sm font-bold mb-2">
+                        Description Point {i}-{j}
+                      </label>
+                      <input
+                        type="text"
+                        {...register(`description_point_${i}_${j}`)}
+                        className="input input-bordered w-full"
+                      />
                     </div>
                   ))}
                 </div>
-                <input
-                  type="submit"
-                  value="Save Changes"
-                  className="btn btn-block text-white border-none bg-black"
-                />
-              </form>
-            </div>
+              ))}
+              <div className="flex justify-end">
+                <button type="submit" className="btn btn-primary">
+                  Save Changes
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
