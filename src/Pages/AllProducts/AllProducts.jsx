@@ -366,7 +366,7 @@ const AllProducts = () => {
                 </div>
               ))}
               <div className="flex justify-end">
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn bg-black btn-primary">
                   Save Changes
                 </button>
               </div>

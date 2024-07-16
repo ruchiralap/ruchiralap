@@ -18,15 +18,15 @@ const AllOrders = () => {
     setSelectedOrder(null);
   };
 
-  const handleDeliver = async (orderId) => {
+  const updateOrderStatus = async (orderId, status) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "Do you want to mark this order as delivered?",
+      text: `Do you want to mark this order as ${status}?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, deliver it!",
+      confirmButtonText: `Yes, mark as ${status}!`,
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -34,12 +34,16 @@ const AllOrders = () => {
             `https://ruchir-alap-backend.vercel.app/updateDeliveryStatus/${orderId}`,
             {
               method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ status }),
             }
           );
           if (response.ok) {
             Swal.fire(
-              "Delivered!",
-              "The order has been marked as delivered.",
+              `${status.charAt(0).toUpperCase() + status.slice(1)}!`,
+              `The order has been marked as ${status}.`,
               "success"
             );
             refetch(); // Re-fetch orders to get updated data
@@ -62,7 +66,6 @@ const AllOrders = () => {
                 <tr className="text-xl bg-white/40 backdrop-blur-md">
                   <th>Customer Name</th>
                   <th>Phone Number</th>
-
                   <th>Status</th>
                   <th>Action</th>
                 </tr>
@@ -79,7 +82,6 @@ const AllOrders = () => {
                       </div>
                     </td>
                     <td className="p-2 align-middle">{order.phone}</td>
-
                     <td className="p-2 align-middle">{order.deliveryStatus}</td>
                     <td className="flex justify-center items-center space-x-4 p-2 align-middle">
                       <button
@@ -89,10 +91,20 @@ const AllOrders = () => {
                         Order details
                       </button>
                       <button
-                        onClick={() => handleDeliver(order._id)}
+                        onClick={() =>
+                          updateOrderStatus(order._id, "in process")
+                        }
+                        className="bg-orange-500 text-white px-4 py-2 rounded"
+                      >
+                        Mark as In Process
+                      </button>
+                      <button
+                        onClick={() =>
+                          updateOrderStatus(order._id, "delivered")
+                        }
                         className="bg-green-500 text-white px-4 py-2 rounded"
                       >
-                        Deliver
+                        Mark as Delivered
                       </button>
                     </td>
                   </tr>
@@ -102,7 +114,6 @@ const AllOrders = () => {
                 <tr className="text-xl bg-white/40 backdrop-blur-md">
                   <th>Customer Name</th>
                   <th>Phone Number</th>
-
                   <th>Status</th>
                   <th>Action</th>
                 </tr>

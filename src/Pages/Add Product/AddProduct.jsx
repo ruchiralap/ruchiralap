@@ -1,10 +1,18 @@
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
-import PrivateAxios from "../../Hooks/PrivateAxios";
 import axios from "axios";
+import PrivateAxios from "../../Hooks/PrivateAxios";
+import useCategory from "../../Hooks/useCategory";
 
 const AddProduct = () => {
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm();
+  const [allCategory, refetch, loading] = useCategory();
 
   const image_hosting_key = "7b7cc2939f38dd7f29e0801393262933";
   const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -82,90 +90,203 @@ const AddProduct = () => {
               <div className="grid lg:grid-cols-2 grid-cols-1 gap-2">
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text text-black">Product Name</span>
+                    <span className="label-text text-black">
+                      Product Name <span className="text-red-500">*</span>
+                    </span>
                   </label>
                   <input
                     type="text"
                     placeholder="Product Name"
-                    {...register("product_name", { required: true })}
-                    required
+                    {...register("product_name", {
+                      required: "Product Name is required",
+                    })}
                     className="input input-bordered w-full"
                   />
+                  {errors.product_name && (
+                    <span className="text-red-500">
+                      {errors.product_name.message}
+                    </span>
+                  )}
                 </div>
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text text-black">Category Name</span>
+                    <span className="label-text text-black">
+                      Category Name <span className="text-red-500">*</span>
+                    </span>
                   </label>
-                  <input
-                    type="text"
-                    placeholder="Category Name"
-                    {...register("category_name", { required: true })}
-                    required
+                  <select
+                    id="category"
+                    {...register("category_name", {
+                      required: "Category is required",
+                    })}
                     className="input input-bordered w-full"
-                  />
+                  >
+                    <option value="" disabled>
+                      Select a category
+                    </option>
+                    {loading ? (
+                      <option>Loading categories...</option>
+                    ) : (
+                      allCategory.map((category) => (
+                        <option
+                          key={category._id}
+                          value={category.category_name}
+                        >
+                          {category.category_name}
+                        </option>
+                      ))
+                    )}
+                  </select>
+                  {errors.category_name && (
+                    <span className="text-red-500">
+                      {errors.category_name.message}
+                    </span>
+                  )}
                 </div>
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text text-black">Price</span>
+                    <span className="label-text text-black">
+                      Price <span className="text-red-500">*</span>
+                    </span>
                   </label>
                   <input
                     type="number"
                     placeholder="Price"
-                    {...register("price", { required: true })}
-                    required
+                    {...register("price", { required: "Price is required" })}
                     className="input input-bordered w-full"
                   />
+                  {errors.price && (
+                    <span className="text-red-500">{errors.price.message}</span>
+                  )}
                 </div>
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text text-black">Product Image</span>
+                    <span className="label-text text-black">
+                      Product Image <span className="text-red-500">*</span>
+                    </span>
                   </label>
                   <input
-                    {...register("productimage", { required: true })}
+                    {...register("productimage", {
+                      required: "Product Image is required",
+                    })}
                     type="file"
                     className="file-input w-full max-w-xs"
                   />
+                  {errors.productimage && (
+                    <span className="text-red-500">
+                      {errors.productimage.message}
+                    </span>
+                  )}
                 </div>
                 <div className="form-control lg:col-span-2">
                   <label className="label">
-                    <span className="label-text text-black">Weight</span>
+                    <span className="label-text text-black">
+                      Weight <span className="text-red-500">*</span>
+                    </span>
                   </label>
                   <input
-                    {...register("weight", { required: true })}
+                    {...register("weight", { required: "Weight is required" })}
                     className="textarea textarea-bordered h-10"
                     cols="30"
                     rows="10"
-                    placeholder="weight"
+                    placeholder="Weight"
                   ></input>
+                  {errors.weight && (
+                    <span className="text-red-500">
+                      {errors.weight.message}
+                    </span>
+                  )}
                 </div>
                 <div className="form-control lg:col-span-2">
                   <label className="label">
-                    <span className="label-text text-black">Description</span>
+                    <span className="label-text text-black">
+                      Description <span className="text-red-500">*</span>
+                    </span>
                   </label>
                   <textarea
-                    {...register("description", { required: true })}
+                    {...register("description", {
+                      required: "Description is required",
+                    })}
                     className="textarea textarea-bordered h-10 w-full"
                     cols="30"
                     rows="10"
                     placeholder="Description"
                   ></textarea>
+                  {errors.description && (
+                    <span className="text-red-500">
+                      {errors.description.message}
+                    </span>
+                  )}
                 </div>
                 <div className="form-control lg:col-span-2">
                   <label className="label">
                     <span className="label-text text-black">
-                      Description Title
+                      Description Title <span className="text-red-500">*</span>
                     </span>
                   </label>
                   <input
                     type="text"
                     placeholder="Description Title"
-                    {...register("description_title", { required: true })}
-                    required
+                    {...register("description_title", {
+                      required: "Description Title is required",
+                    })}
                     className="input input-bordered w-full"
                   />
+                  {errors.description_title && (
+                    <span className="text-red-500">
+                      {errors.description_title.message}
+                    </span>
+                  )}
                 </div>
 
-                {["1", "2", "3", "4", "5"].map((num) => (
+                <div className="w-full lg:col-span-2 grid lg:grid-cols-2 gap-2">
+                  <div className="form-control lg:col-span-2">
+                    <label className="label">
+                      <span className="label-text text-black">
+                        Description Title 1{" "}
+                        <span className="text-red-500">*</span>
+                      </span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Description Title 1"
+                      {...register("description_title_1", {
+                        required: "This field is required",
+                      })}
+                      className="input input-bordered w-full"
+                    />
+                    {errors.description_title_1 && (
+                      <span className="text-red-500">
+                        {errors.description_title_1.message}
+                      </span>
+                    )}
+                  </div>
+                  {[1, 2, 3].map((point) => (
+                    <div key={point} className="form-control col-span-1">
+                      <label className="label">
+                        <span className="label-text text-black">
+                          Description Point 1.{point}{" "}
+                          <span className="text-red-500">*</span>
+                        </span>
+                      </label>
+                      <input
+                        type="text"
+                        placeholder={`Description Point 1.${point}`}
+                        {...register(`description_point_1_${point}`, {
+                          required: "This field is required",
+                        })}
+                        className="input input-bordered w-full"
+                      />
+                      {errors[`description_point_1_${point}`] && (
+                        <span className="text-red-500">
+                          {errors[`description_point_1_${point}`].message}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {["2", "3", "4", "5"].map((num) => (
                   <div
                     key={num}
                     className="w-full lg:col-span-2 grid lg:grid-cols-2 gap-2"
@@ -178,10 +299,15 @@ const AddProduct = () => {
                         type="text"
                         placeholder={`Description Title ${num}`}
                         {...register(`description_title_${num}`, {
-                          required: num !== "5",
+                          required: false,
                         })}
                         className="input input-bordered w-full"
                       />
+                      {errors[`description_title_${num}`] && (
+                        <span className="text-red-500">
+                          {errors[`description_title_${num}`].message}
+                        </span>
+                      )}
                     </div>
                     {[1, 2, 3].map((point) => (
                       <div key={point} className="form-control col-span-1">
@@ -192,10 +318,18 @@ const AddProduct = () => {
                           type="text"
                           placeholder={`Description Point ${num}.${point}`}
                           {...register(`description_point_${num}_${point}`, {
-                            required: num !== "5",
+                            required: false,
                           })}
                           className="input input-bordered w-full"
                         />
+                        {errors[`description_point_${num}_${point}`] && (
+                          <span className="text-red-500">
+                            {
+                              errors[`description_point_${num}_${point}`]
+                                .message
+                            }
+                          </span>
+                        )}
                       </div>
                     ))}
                   </div>
